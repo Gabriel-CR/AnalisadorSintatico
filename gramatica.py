@@ -1,15 +1,27 @@
 class Gramatica:
     def __init__(self):
         self.gramatica = {}
-        self.makeGramatica()
-        self.naoTerminal = ["S", "B", "P", "E"]
-        self.terminal = ["$", "id", "(", "]", "", ")", ","]
+        # self.makeGramatica()
+        # self.naoTerminal = ["S", "B", "P", "E"]
+        # self.terminal = ["$", "id", "(", "]", "", ")", ","]
+        self.naoTerminal = set()
+        self.terminal = set()
 
-    def makeGramatica(self):
-        self.gramatica["S"] = ["B $"]
-        self.gramatica["B"] = ["id P", "id ( E ]"]
-        self.gramatica["P"] = ["", "( E )"]
-        self.gramatica["E"] = ["B , E"]
+    def readGramatica(self):
+        qtdRegras = int(input())
+        while qtdRegras > 0:
+            line = str(input())
+            if self.gramatica.get(line[0]) == None:
+                self.gramatica[line[0]] = [line[5:]]
+            else:
+                self.gramatica[line[0]].append(line[5:])
+            qtdRegras -= 1
+
+    def makeNaoTerminal(self):
+        pass
+
+    def makeTerminal(self):
+        pass
 
     def getGramatica(self):
         return self.gramatica
@@ -19,3 +31,9 @@ class Gramatica:
 
     def isNaoTerminal(self, symbol):
         return symbol in self.naoTerminal
+
+    def __str__(self):
+        res = str()
+        for i in self.gramatica:
+            res += f"{i} -> {self.gramatica[i]}\n"
+        return res
