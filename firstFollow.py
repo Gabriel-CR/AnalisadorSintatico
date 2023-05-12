@@ -8,6 +8,11 @@ class FirstFollow:
 
 
     def first(self, simbolo):
+        """
+        :param simbolo:
+        :return: first do simbolo passado
+        Usa a gramática obtida da classe Gramatica
+        """
         resultado = set()
 
         if simbolo in self.terminal:

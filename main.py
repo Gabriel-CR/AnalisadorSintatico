@@ -3,9 +3,12 @@ from firstFollow import FirstFollow
 
 if __name__ == '__main__':
     a = Gramatica()
-    a.readGramatica()
+    a.readGramaticaFile()
 
-    print(a)
+    print(a.naoTerminal)
+    print(a.terminal)
+
+    # print(a)
 
 
 
