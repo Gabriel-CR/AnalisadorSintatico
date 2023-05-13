@@ -1,7 +1,7 @@
 S -> B $
 B -> id P
 B -> id ( E ]
-P ->
+P -> eps
 P -> ( E )
 E -> B
 E -> B , E

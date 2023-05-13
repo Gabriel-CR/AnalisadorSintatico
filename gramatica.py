@@ -28,31 +28,40 @@ class Gramatica:
         Ler a gramática de um arquivo .txt
         O arquivo tem que ter a sua última linha em branco
         Armazena a grámatica no atributo gramática da classe
-        Chama a função mekeTNT() para obter os Terminais e NaoTerminais
+        Chama as funções makeNaoTerminal() e makeTerminal()
+        para obter os Terminais e NaoTerminais
         """
         # caminho = str(input('Digite caminho do arquivo da gramática: '))
-        caminho = str(input(''))
+        caminho = "./gramatica.txt"
         file = open(caminho, 'r')
         for line in file:
             if self.gramatica.get(line[0]) is None:
                 self.gramatica[line[0]] = [line[5:len(line) - 1]]
             else:
                 self.gramatica[line[0]].append(line[5:len(line) - 1])
-            # print(line[:len(line) - 1])
-        self.makeTNT()
 
+        self.makeNaoTerminal()
+        self.makeTerminal()
 
-    def makeTNT(self):
+    def makeNaoTerminal(self):
         """
-        Produz os terminais e não terminais com base na gramática dada
-        TODO: fazer os terminais
+        Obtem os não terminais da gramática
+        Usa as keys de gramatica como nao terminal
         """
-        for prod in self.gramatica:
-            # print(prod, self.gramatica[prod])
-            self.naoTerminal.add(prod)
-            for i in self.gramatica[prod]:
-                if i.islower():
-                    self.terminal.add(i)
+        for regra in self.gramatica:
+            self.naoTerminal.add(regra)
+
+    def makeTerminal(self):
+        """
+        Obtem os terminais da gramática
+        Usa os não terminais como referencia
+            -> aquilo que não é não terminal, é terminal
+        """
+        for regra in self.gramatica.values():
+            for r in regra:
+                for i in r.split():
+                    if i not in self.naoTerminal:
+                        self.terminal.add(i)
 
     def getGramatica(self):
         return self.gramatica
