@@ -1,11 +1,8 @@
-from gramatica import Gramatica
-
 class FirstFollow:
-    def __init__(self):
-        self.gramatica = Gramatica().getGramatica()
-        self.terminal = Gramatica().terminal
-        self.naoTerminal = Gramatica().naoTerminal
-
+    def __init__(self, gramatica, terminal, naoTerminal):
+        self.gramatica = gramatica
+        self.terminal = terminal
+        self.naoTerminal = naoTerminal
 
     def first(self, simbolo):
         """
@@ -18,7 +15,7 @@ class FirstFollow:
         if simbolo in self.terminal:
             resultado.add(simbolo)
         else:
-            for producao in self.gramatica[simbolo]:
+            for producao in self.gramatica.get(simbolo):
                 if producao != '':
                     b = producao.split()
                     if b[0] in self.terminal:

@@ -4,10 +4,11 @@ from firstFollow import FirstFollow
 if __name__ == '__main__':
     a = Gramatica()
     a.readGramaticaFile()
-    a.makeNaoTerminal()
-    a.makeTerminal()
 
-    ff = FirstFollow()
+    ff = FirstFollow(a.gramatica, a.terminal, a.naoTerminal)
+    print(ff.first('eps'))
 
-    print(a.naoTerminal)
-    print(a.terminal)
+    # print(a.gramatica.get("S"))
+
+
+    # print(a)
