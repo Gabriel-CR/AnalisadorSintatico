@@ -13,18 +13,21 @@ class FirstFollow:
         resultado = set()
 
         if simbolo in self.terminal:
-            resultado.add(simbolo)
+            if simbolo == "eps":
+                return {}
+            else:
+                resultado.add(simbolo)
         else:
             for producao in self.gramatica.get(simbolo):
                 if producao != '':
                     b = producao.split()
                     if b[0] in self.terminal:
                         resultado.add(b[0])
-                    else:
+                    elif b[0] != simbolo:
                         resultado |= self.first(b[0])
 
         return resultado
 
-    def follow(self):
+    def follow(self, simbolo):
         # TODO
         pass

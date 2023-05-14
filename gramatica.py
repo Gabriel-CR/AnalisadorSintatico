@@ -32,7 +32,7 @@ class Gramatica:
         para obter os Terminais e NaoTerminais
         """
         # caminho = str(input('Digite caminho do arquivo da gramática: '))
-        caminho = "./gramatica.txt"
+        caminho = "./utils/g3.txt"
         file = open(caminho, 'r')
         for line in file:
             if self.gramatica.get(line[0]) is None:
@@ -62,15 +62,6 @@ class Gramatica:
                 for i in r.split():
                     if i not in self.naoTerminal:
                         self.terminal.add(i)
-
-    def getGramatica(self):
-        return self.gramatica
-
-    def isTerminal(self, symbol):
-        return symbol in self.terminal
-
-    def isNaoTerminal(self, symbol):
-        return symbol in self.naoTerminal
 
     def __str__(self):
         """
