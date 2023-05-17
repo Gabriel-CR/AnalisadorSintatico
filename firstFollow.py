@@ -48,9 +48,10 @@ class FirstFollow:
             # se o existe um simbolo que não é nullable, retorna False
             flag = True
             for i in producao.split():
-                if not self.nullable(i):
-                    flag = False
-                    break
+                if i != simbolo:
+                    if not self.nullable(i):
+                        flag = False
+                        break
             if flag:
                 return True
         return False

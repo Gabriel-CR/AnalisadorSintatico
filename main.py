@@ -3,7 +3,7 @@ from firstFollow import FirstFollow
 from automato import Automato
 
 if __name__ == '__main__':
-    a = Gramatica("./utils/g2.txt")
+    a = Gramatica("./utils/t.txt")
     a.readGramaticaFile()
 
     ff = FirstFollow(a.gramatica, a.terminal, a.naoTerminal)
