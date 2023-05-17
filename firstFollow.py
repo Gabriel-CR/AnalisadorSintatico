@@ -6,7 +6,7 @@ class FirstFollow:
 
     def first(self, simbolo):
         """
-        :param simbolo:
+        :param: simbolo
         :return: first do simbolo passado
         Usa a gramática obtida da classe Gramatica
         """
@@ -31,3 +31,26 @@ class FirstFollow:
     def follow(self, simbolo):
         # TODO
         pass
+
+    def nullable(self, simbolo):
+        """
+        Calcula se o simbolo é nullable
+        :param simbolo: simbolo do alfabeto a ser calculado
+        :return: True se o simbolo é nullable, False caso contrário
+        """
+        if simbolo == "eps":
+            return True
+        if simbolo in self.terminal:
+            return False
+        for producao in self.gramatica.get(simbolo):
+            res = [] # modificar para testar todas as produções, aqui só testa a primeira
+            # Para cada simbolo da produção,
+            # se o existe um simbolo que não é nullable, retorna False
+            flag = True
+            for i in producao.split():
+                if not self.nullable(i):
+                    flag = False
+                    break
+            if flag:
+                return True
+        return False

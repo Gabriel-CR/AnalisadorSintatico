@@ -1,27 +1,9 @@
 class Gramatica:
-    def __init__(self):
+    def __init__(self, caminho="./utils/gramatica.txt"):
+        self.caminho = caminho
         self.gramatica = {}
         self.naoTerminal = set()
         self.terminal = set()
-
-    def readGramatica(self):
-        """
-        Ler a gramática via terminal
-        Armazena a grámatica no atributo gramática da classe
-        Chama a função mekeTNT() para obter os Terminais e NaoTerminais
-        """
-        qtdRegras = int(input('Digite a quantidade de regras da gramática: '))
-        print("A gramática deve seguir o formato: A -> a B c")
-        print("Digite a sua gramática: ")
-        while qtdRegras > 0:
-            line = str(input())
-            if self.gramatica.get(line[0]) is None:
-                self.gramatica[line[0]] = [line[5:]]
-            else:
-                self.gramatica[line[0]].append(line[5:])
-            qtdRegras -= 1
-
-        self.makeTNT()
 
     def readGramaticaFile(self):
         """
@@ -31,9 +13,7 @@ class Gramatica:
         Chama as funções makeNaoTerminal() e makeTerminal()
         para obter os Terminais e NaoTerminais
         """
-        # caminho = str(input('Digite caminho do arquivo da gramática: '))
-        caminho = "./utils/g3.txt"
-        file = open(caminho, 'r')
+        file = open(self.caminho, 'r')
         for line in file:
             if self.gramatica.get(line[0]) is None:
                 self.gramatica[line[0]] = [line[5:len(line) - 1]]
