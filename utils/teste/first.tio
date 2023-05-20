@@ -1,0 +1,46 @@
+>>>>>>>> teste first 1
+./utils/gramatica/q1.txt
+========
+FIRST(A) = {}
+FIRST(B) = {'a'}
+FIRST(C) = {'a'}
+FIRST(S) = {'a'}
+<<<<<<<<
+
+>>>>>>>> teste first 2
+./utils/gramatica/q2.txt
+========
+FIRST(A) = False
+FIRST(B) = True
+FIRST(C) = False
+FIRST(D) = False
+FIRST(S) = False
+<<<<<<<<
+
+>>>>>>>> teste first 3
+./utils/gramatica/q3.txt
+========
+FIRST(A) = True
+FIRST(B) = True
+FIRST(C) = False
+FIRST(D) = True
+FIRST(S) = True
+<<<<<<<<
+
+>>>>>>>> teste first 4
+./utils/gramatica/q4.txt
+========
+FIRST(A) = False
+FIRST(B) = True
+FIRST(C) = True
+FIRST(D) = True
+FIRST(S) = False
+<<<<<<<<
+
+>>>>>>>> teste first 5
+./utils/gramatica/q5.txt
+========
+FIRST(X) = True
+FIRST(Y) = True
+FIRST(Z) = False
+<<<<<<<<

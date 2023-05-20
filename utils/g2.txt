@@ -1,8 +1,0 @@
-E -> T R
-R -> + T R
-R -> eps
-T -> F Y
-Y -> * F Y
-Y -> eps
-F -> ( E )
-F -> i

@@ -43,9 +43,6 @@ class FirstFollow:
         if simbolo in self.terminal:
             return False
         for producao in self.gramatica.get(simbolo):
-            res = [] # modificar para testar todas as produções, aqui só testa a primeira
-            # Para cada simbolo da produção,
-            # se o existe um simbolo que não é nullable, retorna False
             flag = True
             for i in producao.split():
                 if i != simbolo:

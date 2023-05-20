@@ -1,0 +1,46 @@
+>>>>>>>> teste nullable 1
+./utils/gramatica/q1.txt
+========
+NULLABLE(A) = True
+NULLABLE(B) = False
+NULLABLE(C) = False
+NULLABLE(S) = False
+<<<<<<<<
+
+>>>>>>>> teste nullable 2
+./utils/gramatica/q2.txt
+========
+NULLABLE(A) = False
+NULLABLE(B) = True
+NULLABLE(C) = False
+NULLABLE(D) = False
+NULLABLE(S) = False
+<<<<<<<<
+
+>>>>>>>> teste nullable 3
+./utils/gramatica/q3.txt
+========
+NULLABLE(A) = True
+NULLABLE(B) = True
+NULLABLE(C) = False
+NULLABLE(D) = True
+NULLABLE(S) = True
+<<<<<<<<
+
+>>>>>>>> teste nullable 4
+./utils/gramatica/q4.txt
+========
+NULLABLE(A) = False
+NULLABLE(B) = True
+NULLABLE(C) = True
+NULLABLE(D) = True
+NULLABLE(S) = False
+<<<<<<<<
+
+>>>>>>>> teste nullable 5
+./utils/gramatica/q5.txt
+========
+NULLABLE(X) = True
+NULLABLE(Y) = True
+NULLABLE(Z) = False
+<<<<<<<<
