@@ -9,7 +9,9 @@ if __name__ == '__main__':
     a.readGramaticaFile()
 
     aut = Automato(a.gramatica, a.naoTerminal)
-    aut.makeAutomato(list(a.gramatica.keys())[0])
+    # inicial = list(a.gramatica.keys())[0]
+    # aut.makeAutomato((inicial, a.gramatica.get(inicial)))
+    aut.testWord("( id ) $")
 
     # t = Teste(a.gramatica, a.terminal, a.naoTerminal)
     # t.testFirst()
