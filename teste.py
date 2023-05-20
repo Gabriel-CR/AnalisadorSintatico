@@ -14,6 +14,5 @@ class Teste:
 
     def testFirst(self):
         ff = FirstFollow(self.gramatica, self.terminal, self.naoTerminal)
-        a = ff.first("S")
         for i in sorted(self.naoTerminal):
-            print(f"FIRST({i}) = {a[i]}")
+            print(f"FIRST({i}) = {ff.first(i)}")

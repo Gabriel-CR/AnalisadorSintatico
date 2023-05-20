@@ -19,12 +19,18 @@ class FirstFollow:
                 resultado.add(simbolo)
         else:
             for producao in self.gramatica.get(simbolo):
-                if producao != '':
-                    b = producao.split()
-                    if b[0] in self.terminal:
-                        resultado.add(b[0])
-                    elif b[0] != simbolo:
-                        resultado |= self.first(b[0])
+                for i in producao.split():
+                    if i in self.terminal:
+                        if i != "eps":
+                            resultado.add(i)
+                        else:
+                            return self.first(i)
+                    else:
+                        if self.nullable(i):
+                            pass
+                        else:
+                            resultado = resultado.union(self.first(i))
+                            break
 
         return resultado
 

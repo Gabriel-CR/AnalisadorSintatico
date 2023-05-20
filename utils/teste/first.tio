@@ -10,11 +10,11 @@ FIRST(S) = {'a'}
 >>>>>>>> teste first 2
 ./utils/gramatica/q2.txt
 ========
-FIRST(A) = False
-FIRST(B) = True
-FIRST(C) = False
-FIRST(D) = False
-FIRST(S) = False
+FIRST(A) = {'a', 'd'}
+FIRST(B) = {}
+FIRST(C) = {'a', 'd'}
+FIRST(D) = {'a', 'd'}
+FIRST(S) = {'a', 'd'}
 <<<<<<<<
 
 >>>>>>>> teste first 3

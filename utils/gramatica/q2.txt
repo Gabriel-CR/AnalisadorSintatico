@@ -3,3 +3,4 @@ A -> B C
 B -> eps
 C -> D
 D -> d
+D -> a
