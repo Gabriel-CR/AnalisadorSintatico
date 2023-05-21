@@ -1,5 +1,5 @@
 Z -> d
-Z -> XYZ
+Z -> X Y Z
 Y -> eps
 Y -> c
 X -> Y
