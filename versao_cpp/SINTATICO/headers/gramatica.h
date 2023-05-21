@@ -20,12 +20,17 @@ class Gramatica
 public:
     /*
     * Construtor da classe Gramatica
-    @param caminho: caminho do arquivo de gramatica
+    @param caminho: caminho do arquivo da gramatica
     */
     Gramatica(string caminho);
     /*
-    Ler arquivo com a gramatica usando o caminho
+    * Ler arquivo com a gramatica usando o caminho
     passado no construtor
+    * Arquivo deve seguir o padrao:
+        * S -> a A, para cada regra da gramática
+        * A -> eps, para regras que geram epsilon
+        * A -> b
+        * A -> c, para o mesmo nao terminal com mais de uma regra
     */
     void read_gramatica_file();
     /*
