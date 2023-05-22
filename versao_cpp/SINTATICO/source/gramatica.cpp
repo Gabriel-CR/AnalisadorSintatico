@@ -1,35 +1,7 @@
 #include "../headers/gramatica.h"
 
-Gramatica::Gramatica(string caminho)
+Gramatica::Gramatica()
 {
-    this->caminho = caminho;
-}
-
-void Gramatica::read_gramatica_file()
-{
-    cout << "Lendo arquivo de gramatica..." << endl;
-    fstream file;
-    file.open(this->caminho, ios::in);
-
-    if (file.is_open())
-    {
-        string line;
-        while (getline(file, line))
-        {
-            vector<string> temp = Utils::split(line, " -> ");
-
-            string nao_terminal = temp[0];
-            string gerador = temp[1];
-
-            this->gramatica[nao_terminal].push_back(gerador);
-        }
-        file.close();
-        cout << "Gramatica lida com sucesso!" << endl;
-    }
-    else
-    {
-        cout << "Erro ao abrir arquivo de gramatica." << endl;
-    }
 }
 
 void Gramatica::make_terminais()
@@ -73,6 +45,11 @@ set<string> Gramatica::get_terminais()
 set<string> Gramatica::get_nao_terminais()
 {
     return this->nao_terminais;
+}
+
+void Gramatica::set_gramatica(map<string, vector<string>> gramatica)
+{
+    this->gramatica = gramatica;
 }
 
 void Gramatica::print_gramatica()

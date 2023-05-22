@@ -19,20 +19,9 @@ class Gramatica
 
 public:
     /*
-    * Construtor da classe Gramatica
-    @param caminho: caminho do arquivo da gramatica
-    */
-    Gramatica(string caminho);
-    /*
-    * Ler arquivo com a gramatica usando o caminho
-    passado no construtor
-    * Arquivo deve seguir o padrao:
-        * S -> a A, para cada regra da gramática
-        * A -> eps, para regras que geram epsilon
-        * A -> b
-        * A -> c, para o mesmo nao terminal com mais de uma regra
-    */
-    void read_gramatica_file();
+     * Construtor da classe Gramatica
+     */
+    Gramatica();
     /*
     * Deve ser executado apos a leitura do arquivo de gramatica
     e cria o conjunto de nao terminais na gramatica
@@ -49,10 +38,12 @@ public:
     */
     void make_terminais();
 
-    // GETS
+    // GETS e SETS
     map<string, vector<string>> get_gramatica();
     set<string> get_terminais();
     set<string> get_nao_terminais();
+
+    void set_gramatica(map<string, vector<string>> gramatica);
 
     void print_gramatica();
 };

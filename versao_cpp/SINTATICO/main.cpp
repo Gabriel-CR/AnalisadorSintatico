@@ -11,6 +11,7 @@ using namespace std;
 int main()
 {
     Controller controller("gramatica/gramatica.txt");
+    controller.read_gramatica_file();
     controller.make_nullable();
     controller.make_firsts();
     controller.make_follows();
