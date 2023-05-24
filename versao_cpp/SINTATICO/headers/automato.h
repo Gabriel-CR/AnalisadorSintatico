@@ -27,6 +27,7 @@ public:
     Automato();
 
     void make_automato(vector<ElemEstado> es);
+    void make_automato_iterativo(ElemEstado es);
     bool test_word(string word);
 
     void set_gramatica(map<string, vector<string>> gramatica);

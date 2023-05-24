@@ -3,6 +3,6 @@
 ElemEstado::ElemEstado(string gerador, string gerado, int posicao_ponto)
 {
     this->gerador = gerador;
-    this->gerado = gerado;
+    this->gerado = Utils::split(gerado, " ");
     this->posicao_ponto = posicao_ponto;
 }
