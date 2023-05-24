@@ -1,6 +1,2 @@
-S -> A B C
-A -> B C
-B -> eps
-C -> D
-D -> d 
-D -> a
+S -> A $
+A -> a

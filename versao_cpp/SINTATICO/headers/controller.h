@@ -2,6 +2,7 @@
 #include "gramatica.h"
 #include "first_follow.h"
 #include "automato.h"
+#include "elem_estado.h"
 
 using namespace std;
 
@@ -20,5 +21,5 @@ public:
     void make_nullable();
     void make_firsts();
     void make_follows();
-    // void make_automato();
+    void make_automato();
 };

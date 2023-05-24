@@ -1,6 +1,4 @@
 #include <iostream>
-#include "headers/soma.h"
-#include "headers/gramatica.h"
 #include "headers/controller.h"
 
 // compile and run
@@ -12,10 +10,10 @@ int main()
 {
     Controller controller("gramatica/gramatica.txt");
     controller.read_gramatica_file();
-    controller.make_nullable();
-    controller.make_firsts();
-    controller.make_follows();
-    // controller.make_automato();
+    // controller.make_nullable();
+    // controller.make_firsts();
+    // controller.make_follows();
+    controller.make_automato();
 
     return 0;
 }

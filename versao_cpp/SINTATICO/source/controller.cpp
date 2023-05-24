@@ -84,12 +84,16 @@ void Controller::make_follows()
     }
 }
 
-/*
-void Controller::make_automato() {
-    this->automato.set_gramatica(gramatica.get_gramatica());
-    this->automato.set_terminais(gramatica.get_terminais());
-    this->automato.set_nao_terminais(gramatica.get_nao_terminais());
-    this->automato.make_automato();
+void Controller::make_automato()
+{
+    this->automato.set_ordem_regras(this->ordem_regras);
+    this->automato.set_gramatica(this->gramatica.get_gramatica());
+    this->automato.set_terminais(this->gramatica.get_terminais());
+    this->automato.set_nao_terminais(this->gramatica.get_nao_terminais());
+
+    vector<ElemEstado> elem_inicial;
+    elem_inicial.push_back(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0));
+    this->automato.make_automato(elem_inicial);
     this->automato.print_automato();
+    // this->automato.test_word("a");
 }
-*/
