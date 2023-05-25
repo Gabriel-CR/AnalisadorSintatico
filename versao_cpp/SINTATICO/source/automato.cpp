@@ -16,6 +16,8 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
     // enquanto a fila não estiver vazia
     while (!fila.empty())
     {
+        // atualiza current_state
+        current_state = fila.front().estado;
         temp_state = current_state;
 
         // tirar da fila e colcar em regras enquando o estado do ElemEstado for o mesmo
@@ -25,7 +27,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             fila.pop();
 
             // mostra estado elemento que está sendo tirado da fila
-            /*cout << ".... retirando ...." << endl;
+            cout << ".... retirando ...." << endl;
             cout << current_state << " : ";
             cout << regras[regras.size() - 1].gerador << " -> ";
             for (int j = 0; j < (int)regras[regras.size() - 1].gerado.size(); j++)
@@ -40,7 +42,9 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             {
                 cout << ". ";
             }
-            cout << endl;*/
+            // mostrar estado registrado no elemento
+            cout << " , " << regras[regras.size() - 1].estado << endl;
+            cout << "..................." << endl;
         }
 
         // se . na posição de NT, adiciona as regras deste NT em regras
@@ -59,9 +63,8 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
         }
 
         // mostra as regras
-        /*for (int i = 0; i < (int)regras.size(); i++)
+        for (int i = 0; i < (int)regras.size(); i++)
         {
-            cout << ".... mostrar regras 1 ...." << endl;
             // mostrar estado atual
             cout << current_state << " : ";
             cout << regras[i].gerador << " -> ";
@@ -78,7 +81,8 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 cout << ". ";
             }
             cout << endl;
-        }*/
+        }
+        cout << endl;
 
         // [shift] se . na posição de Terminal != $, coloca um shift em automato
         for (int i = 0; i < (int)regras.size(); i++)
@@ -87,12 +91,15 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 this->terminais.find(regras[i].gerado[regras[i].posicao_ponto]) != this->terminais.end() &&
                 regras[i].gerado[regras[i].posicao_ponto] != "$")
             {
-                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "s" + to_string(temp_state + 1);
+                // vai para o estado do ultimo elemento da fila + 1
+                int temp = fila.back().estado;
+
+                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "s" + to_string(temp);
 
                 // avança o ponto e estado
                 // coloca essa regra modificada na fila
                 regras[i].posicao_ponto++;
-                regras[i].estado = temp_state + 1;
+                regras[i].estado = temp + 1;
                 fila.push(regras[i]);
 
                 // verifica se não tem um terminal igual a este que vai para o mesmo estado
@@ -101,14 +108,14 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                     if (regras[j].posicao_ponto < (int)regras[j].gerado.size() &&
                         this->terminais.find(regras[j].gerado[regras[j].posicao_ponto]) != this->terminais.end() &&
                         regras[j].gerado[regras[j].posicao_ponto] != "$" &&
-                        regras[j].gerado[regras[j].posicao_ponto] == regras[i].gerado[regras[i].posicao_ponto] &&
+                        regras[j].gerado[regras[j].posicao_ponto] != regras[i].gerado[regras[i].posicao_ponto] &&
                         regras[j].estado == regras[i].estado)
                     {
                         // se tiver, faz o mesmo processo de cima
-                        this->automato[current_state][regras[j].gerado[regras[j].posicao_ponto]] = "s" + to_string(temp_state);
+                        this->automato[current_state][regras[j].gerado[regras[j].posicao_ponto]] = "s" + to_string(temp);
 
                         regras[j].posicao_ponto++;
-                        regras[j].estado = temp_state + 1;
+                        regras[j].estado = temp + 1;
                         fila.push(regras[j]);
 
                         // apaga a regra antiga de regras
@@ -119,21 +126,26 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 // apaga a regra antiga de regras
                 regras.erase(regras.begin() + i);
 
-                temp_state++;
+                // incrementa o estado temporário
+                temp_state += 1;
             }
         }
 
+        // [ERRO AQUI]
         // [goto] se . na posição de Não Terminal, coloca um goto em automato
         for (int i = 0; i < (int)regras.size(); i++)
         {
             if (regras[i].posicao_ponto < (int)regras[i].gerado.size() && this->nao_terminais.find(regras[i].gerado[regras[i].posicao_ponto]) != this->nao_terminais.end())
             {
-                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "g" + to_string(temp_state + 1);
+                // vai para o estado do ultimo elemento da fila + 1
+                int temp = fila.back().estado;
+
+                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "g" + to_string(temp);
 
                 // avança o ponto e estado
                 // coloca essa regra modificada na fila
                 regras[i].posicao_ponto++;
-                regras[i].estado = temp_state + 1;
+                regras[i].estado = temp + 1;
                 fila.push(regras[i]);
 
                 // verifica se não tem um não terminal igual a este que vai para o mesmo estado
@@ -145,10 +157,10 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                         regras[j].estado == regras[i].estado)
                     {
                         // se tiver, faz o mesmo processo de cima
-                        this->automato[current_state][regras[j].gerado[regras[j].posicao_ponto]] = "g" + to_string(temp_state);
+                        this->automato[current_state][regras[j].gerado[regras[j].posicao_ponto]] = "g" + to_string(temp);
 
                         regras[j].posicao_ponto++;
-                        regras[j].estado = temp_state + 1;
+                        regras[j].estado = temp + 1;
                         fila.push(regras[j]);
 
                         // apaga a regra antiga de regras
@@ -159,7 +171,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 // apaga a regra antiga de regras
                 regras.erase(regras.begin() + i);
 
-                temp_state++;
+                temp_state += 1;
             }
         }
 
@@ -176,7 +188,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                     {
                         if (this->ordem_regras[j].first == regras[i].gerador && this->ordem_regras[j].second == Utils::join(regras[i].gerado, " "))
                         {
-                            this->automato[current_state][*it] = "r" + to_string(j + 1);
+                            this->automato[current_state][*it] = "r" + to_string(j);
                         }
                     }
                 }
@@ -197,9 +209,6 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             // apagar a regra antiga de regras
             regras.erase(regras.begin() + i);
         }
-
-        // atualiza o estado atual
-        current_state++;
     }
 }
 
@@ -245,16 +254,17 @@ bool Automato::test_word(string word)
             {
                 pilha.pop();
             }
-            // empilha o não terminal
-            pilha.push(regra.first);
             // muda o estado atual para o estado do topo da pilha
             estado_atual = stoi(pilha.top().substr(6, pilha.top().size() - 6));
+            // empilha o não terminal
+            pilha.push(regra.first);
             // this->estado_atual = this->automato[this->estado_atual][regra.first];
         }
         // se acao for goto
         else if (acao[0] == 'g')
         {
             // muda o estado atual
+            cout << "mudando estado atual para " << acao.substr(1, acao.size() - 1) << endl;
             estado_atual = stoi(acao.substr(1, acao.size() - 1));
         }
         else
