@@ -94,7 +94,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 // vai para o estado do ultimo elemento da fila + 1
                 int temp = fila.back().estado;
 
-                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "s" + to_string(temp);
+                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "s" + to_string(temp_state + 1);
 
                 // avança o ponto e estado
                 // coloca essa regra modificada na fila
@@ -140,7 +140,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 // vai para o estado do ultimo elemento da fila + 1
                 int temp = fila.back().estado;
 
-                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "g" + to_string(temp);
+                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "g" + to_string(temp_state + 1);
 
                 // avança o ponto e estado
                 // coloca essa regra modificada na fila
