@@ -25,7 +25,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             fila.pop();
 
             // mostra estado elemento que está sendo tirado da fila
-            cout << ".... retirando ...." << endl;
+            /*cout << ".... retirando ...." << endl;
             cout << current_state << " : ";
             cout << regras[regras.size() - 1].gerador << " -> ";
             for (int j = 0; j < (int)regras[regras.size() - 1].gerado.size(); j++)
@@ -40,7 +40,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             {
                 cout << ". ";
             }
-            cout << endl;
+            cout << endl;*/
         }
 
         // se . na posição de NT, adiciona as regras deste NT em regras
@@ -59,7 +59,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
         }
 
         // mostra as regras
-        for (int i = 0; i < (int)regras.size(); i++)
+        /*for (int i = 0; i < (int)regras.size(); i++)
         {
             cout << ".... mostrar regras 1 ...." << endl;
             // mostrar estado atual
@@ -78,7 +78,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 cout << ". ";
             }
             cout << endl;
-        }
+        }*/
 
         // [shift] se . na posição de Terminal != $, coloca um shift em automato
         for (int i = 0; i < (int)regras.size(); i++)
