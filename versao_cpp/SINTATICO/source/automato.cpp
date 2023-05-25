@@ -27,7 +27,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             fila.pop();
 
             // mostra estado elemento que está sendo tirado da fila
-            cout << ".... retirando ...." << endl;
+            /*cout << ".... retirando ...." << endl;
             cout << current_state << " : ";
             cout << regras[regras.size() - 1].gerador << " -> ";
             for (int j = 0; j < (int)regras[regras.size() - 1].gerado.size(); j++)
@@ -44,7 +44,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             }
             // mostrar estado registrado no elemento
             cout << " , " << regras[regras.size() - 1].estado << endl;
-            cout << "..................." << endl;
+            cout << "..................." << endl;*/
         }
 
         // se . na posição de NT, adiciona as regras deste NT em regras
@@ -63,7 +63,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
         }
 
         // mostra as regras
-        for (int i = 0; i < (int)regras.size(); i++)
+        /*for (int i = 0; i < (int)regras.size(); i++)
         {
             // mostrar estado atual
             cout << current_state << " : ";
@@ -82,7 +82,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             }
             cout << endl;
         }
-        cout << endl;
+        cout << endl;*/
 
         // [shift] se . na posição de Terminal != $, coloca um shift em automato
         for (int i = 0; i < (int)regras.size(); i++)
@@ -226,6 +226,11 @@ bool Automato::test_word(string word)
         string simbolo = word.substr(i, 1);
         string acao = estado[simbolo];
 
+        cout << "\nInicio\nEstado atual: " << estado_atual << endl;
+        cout << "Simbolo atual: " << simbolo << endl;
+        cout << "Ação: " << acao << endl
+             << endl;
+
         // se a ação for shift
         if (acao[0] == 's')
         {
@@ -249,13 +254,15 @@ bool Automato::test_word(string word)
         {
             // pega a regra
             pair<string, string> regra = this->ordem_regras[stoi(acao.substr(1, acao.size() - 1)) - 1];
+            // muda o estado atual para o estado do topo da pilha
+            estado_atual = stoi(pilha.top().substr(6, pilha.top().size() - 6));
+            // desempilha o estado
+            pilha.pop();
             // desempilha o tamanho da regra
             for (int j = 0; j < (int)regra.second.size(); j++)
             {
                 pilha.pop();
             }
-            // muda o estado atual para o estado do topo da pilha
-            estado_atual = stoi(pilha.top().substr(6, pilha.top().size() - 6));
             // empilha o não terminal
             pilha.push(regra.first);
             // this->estado_atual = this->automato[this->estado_atual][regra.first];
@@ -272,6 +279,11 @@ bool Automato::test_word(string word)
             cout << "Palavra não aceita!" << endl;
             return false;
         }
+
+        cout << "\nFim\nEstado atual: " << estado_atual << endl;
+        cout << "Simbolo atual: " << simbolo << endl;
+        cout << "Ação: " << acao << endl
+             << endl;
     }
 }
 

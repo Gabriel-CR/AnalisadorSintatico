@@ -96,5 +96,5 @@ void Controller::make_automato()
     // this->automato.make_automato(elem_inicial);
     this->automato.make_automato_iterativo(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0, 1));
     this->automato.print_automato();
-    // this->automato.test_word("a");
+    this->automato.test_word("a");
 }
