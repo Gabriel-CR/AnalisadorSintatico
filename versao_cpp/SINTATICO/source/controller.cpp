@@ -92,9 +92,9 @@ void Controller::make_automato()
     this->automato.set_nao_terminais(this->gramatica.get_nao_terminais());
 
     vector<ElemEstado> elem_inicial;
-    elem_inicial.push_back(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0));
-    this->automato.make_automato(elem_inicial);
-    // this->automato.make_automato_iterativo(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0));
+    // elem_inicial.push_back(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0));
+    // this->automato.make_automato(elem_inicial);
+    this->automato.make_automato_iterativo(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0, 1));
     this->automato.print_automato();
     // this->automato.test_word("a");
 }

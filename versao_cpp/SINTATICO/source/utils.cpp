@@ -24,3 +24,15 @@ vector<string> Utils::split(string str, string token)
     }
     return result;
 }
+
+string Utils::join(vector<string> v, string token)
+{
+    string result = "";
+    for (int i = 0; i < v.size(); i++)
+    {
+        result += v[i];
+        if (i != v.size() - 1)
+            result += token;
+    }
+    return result;
+}

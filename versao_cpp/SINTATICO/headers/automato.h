@@ -6,6 +6,7 @@
 #include <vector>
 #include <set>
 #include <stack>
+#include <queue>
 #include <string>
 
 #include "gramatica.h"
@@ -15,8 +16,8 @@ using namespace std;
 
 class Automato
 {
-    map<string, map<string, string>> automato;
-    string estado_atual = "1";
+    map<int, map<string, string>> automato;
+    // int estado_atual = 1;
 
     map<string, vector<string>> gramatica;
     vector<pair<string, string>> ordem_regras;
@@ -27,7 +28,7 @@ public:
     Automato();
 
     void make_automato(vector<ElemEstado> es);
-    void make_automato_iterativo(ElemEstado es);
+    void make_automato_iterativo(ElemEstado elem_inicial);
     bool test_word(string word);
 
     void set_gramatica(map<string, vector<string>> gramatica);
