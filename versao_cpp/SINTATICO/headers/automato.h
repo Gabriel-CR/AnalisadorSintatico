@@ -27,7 +27,7 @@ class Automato
 public:
     Automato();
 
-    void make_automato(vector<ElemEstado> es);
+    void make_automato(ElemEstado elem_inicial);
     void make_automato_iterativo(ElemEstado elem_inicial);
     bool test_word(string word);
 

@@ -4,7 +4,7 @@ Automato::Automato()
 {
 }
 
-void Automato::make_automato_iterativo(ElemEstado elem_inicial)
+void Automato::make_automato(ElemEstado elem_inicial)
 {
     queue<ElemEstado> fila;
     fila.push(elem_inicial);
@@ -25,26 +25,6 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
         {
             regras.push_back(fila.front());
             fila.pop();
-
-            // mostra estado elemento que está sendo tirado da fila
-            /*cout << ".... retirando ...." << endl;
-            cout << current_state << " : ";
-            cout << regras[regras.size() - 1].gerador << " -> ";
-            for (int j = 0; j < (int)regras[regras.size() - 1].gerado.size(); j++)
-            {
-                if (j == regras[regras.size() - 1].posicao_ponto)
-                {
-                    cout << ". ";
-                }
-                cout << regras[regras.size() - 1].gerado[j] << " ";
-            }
-            if (regras[regras.size() - 1].posicao_ponto == (int)regras[regras.size() - 1].gerado.size())
-            {
-                cout << ". ";
-            }
-            // mostrar estado registrado no elemento
-            cout << " , " << regras[regras.size() - 1].estado << endl;
-            cout << "..................." << endl;*/
         }
 
         // se . na posição de NT, adiciona as regras deste NT em regras
@@ -61,28 +41,6 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 }
             }
         }
-
-        // mostra as regras
-        /*for (int i = 0; i < (int)regras.size(); i++)
-        {
-            // mostrar estado atual
-            cout << current_state << " : ";
-            cout << regras[i].gerador << " -> ";
-            for (int j = 0; j < (int)regras[i].gerado.size(); j++)
-            {
-                if (j == regras[i].posicao_ponto)
-                {
-                    cout << ". ";
-                }
-                cout << regras[i].gerado[j] << " ";
-            }
-            if (regras[i].posicao_ponto == regras[i].gerado.size())
-            {
-                cout << ". ";
-            }
-            cout << endl;
-        }
-        cout << endl;*/
 
         // [shift] se . na posição de Terminal != $, coloca um shift em automato
         for (int i = 0; i < (int)regras.size(); i++)
@@ -131,7 +89,6 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
             }
         }
 
-        // [ERRO AQUI]
         // [goto] se . na posição de Não Terminal, coloca um goto em automato
         for (int i = 0; i < (int)regras.size(); i++)
         {
