@@ -17,8 +17,6 @@ using namespace std;
 class Automato
 {
     map<int, map<string, string>> automato;
-    // int estado_atual = 1;
-
     map<string, vector<string>> gramatica;
     vector<pair<string, string>> ordem_regras;
     set<string> terminais;
@@ -27,15 +25,27 @@ class Automato
 public:
     Automato();
 
+    /*
+    Forma o automato a partir de um elemento inicial
+    @param elem_inicial: primeira regra da gramatica
+    */
     void make_automato(ElemEstado elem_inicial);
-    void make_automato_iterativo(ElemEstado elem_inicial);
+    /*
+    Testa uma dada palavra com base no autômato feito no método make_automato
+    @param word: palavra a ser testada
+    */
     bool test_word(string word);
 
+    // SETTERS
     void set_gramatica(map<string, vector<string>> gramatica);
     void set_ordem_regras(vector<pair<string, string>> ordem_regras);
     void set_terminais(set<string> terminais);
     void set_nao_terminais(set<string> nao_terminais);
 
+    /*
+    Imprime o autômato
+    Mostra o estad e cada ação que ele pode tomar com cada símbolo
+    */
     void print_automato();
 };
 

@@ -27,6 +27,7 @@ void Automato::make_automato(ElemEstado elem_inicial)
             fila.pop();
         }
 
+        // [ERRO] loop infinito, verificar antes de colocar em regras se já não possui essa regra em regras
         // se . na posição de NT, adiciona as regras deste NT em regras
         for (int i = 0; i < (int)regras.size(); i++)
         {
@@ -171,7 +172,8 @@ void Automato::make_automato(ElemEstado elem_inicial)
 
 bool Automato::test_word(string word)
 {
-    cout << "Testando palavra: " << word << endl;
+    cout << "Testando palavra: " << word << endl
+         << endl;
     int estado_atual = 1;
     int i = 0;
 
@@ -189,6 +191,8 @@ bool Automato::test_word(string word)
         if (!pilha.empty() && this->nao_terminais.find(pilha.top()) != this->nao_terminais.end())
         {
             acao = this->automato[estado_atual][pilha.top()];
+
+            // [ERRO] em alguns casos eu não irei poder retirar
             pilha.pop();
         }
 
@@ -261,7 +265,8 @@ bool Automato::test_word(string word)
             cout << pilha_aux.top() << " ";
             pilha_aux.pop();
         }
-        cout << endl;
+        cout << endl
+             << endl;
     }
 
     return false;

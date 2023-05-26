@@ -94,5 +94,5 @@ void Controller::make_automato()
     vector<ElemEstado> elem_inicial;
     this->automato.make_automato(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0, 1));
     this->automato.print_automato();
-    this->automato.test_word("a a a i $");
+    this->automato.test_word("id ( id , id ) $");
 }

@@ -1,4 +1,6 @@
-S -> A $
-A -> a B
-B -> A
-B -> i
+S -> B $
+B -> id P
+B -> id ( E ]
+P -> ( E )
+E -> B
+E -> B , E
