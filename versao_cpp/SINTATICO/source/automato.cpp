@@ -94,7 +94,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 // vai para o estado do ultimo elemento da fila + 1
                 int temp = fila.back().estado;
 
-                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "s" + to_string(temp_state + 1);
+                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "s" + to_string(temp + 1);
 
                 // avança o ponto e estado
                 // coloca essa regra modificada na fila
@@ -140,7 +140,7 @@ void Automato::make_automato_iterativo(ElemEstado elem_inicial)
                 // vai para o estado do ultimo elemento da fila + 1
                 int temp = fila.back().estado;
 
-                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "g" + to_string(temp_state + 1);
+                this->automato[current_state][regras[i].gerado[regras[i].posicao_ponto]] = "g" + to_string(temp + 1);
 
                 // avança o ponto e estado
                 // coloca essa regra modificada na fila
@@ -218,16 +218,20 @@ bool Automato::test_word(string word)
     int estado_atual = 1;
     int i = 0;
 
+    vector<string> palavra = Utils::split(word, " ");
+
     stack<string> pilha;
 
     while (true)
     {
-        char simbolo = word[i];
-        string acao = this->automato[estado_atual][string(1, simbolo)];
-        if (simbolo == '$' && pilha.size() == 1)
+        string simbolo = palavra[i];
+        string acao = this->automato[estado_atual][simbolo];
+
+        // se no topo da pilha tem um não terminal
+        // alterar acao
+        if (!pilha.empty() && this->nao_terminais.find(pilha.top()) != this->nao_terminais.end())
         {
             acao = this->automato[estado_atual][pilha.top()];
-            cout << "acao teste: " << acao << endl;
             pilha.pop();
         }
 
@@ -241,7 +245,7 @@ bool Automato::test_word(string word)
         if (acao[0] == 's')
         {
             pilha.push("estado " + to_string(estado_atual));
-            pilha.push(string(1, simbolo));
+            pilha.push(simbolo);
 
             estado_atual = stoi(acao.substr(1, acao.size() - 1));
             i++;
@@ -252,7 +256,7 @@ bool Automato::test_word(string word)
         // desempilha o estado
         else if (acao[0] == 'r')
         {
-            int tamanho_regra = this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].second.size();
+            int tamanho_regra = Utils::split(this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].second, " ").size();
             cout << "Tamanho da regra: " << tamanho_regra << endl;
 
             for (int j = 0; j < tamanho_regra; j++)
