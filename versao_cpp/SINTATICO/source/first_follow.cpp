@@ -125,13 +125,13 @@ set<string> FirstFollow::follow(string str)
         {
             // para cada elemento da producao
             vector<string> split_gramatica = Utils::split(*it2, " ");
-            for (int i = 0; i < split_gramatica.size(); i++)
+            for (int i = 0; i < (int)split_gramatica.size(); i++)
             {
                 // se encontrei str na producao
                 if (split_gramatica[i] == str)
                 {
                     // se tem um elemento depois de str
-                    if (i < split_gramatica.size() - 1)
+                    if (i < (int)split_gramatica.size() - 1)
                     {
                         // se o proximo elemento é um terminal, adiciona ele no follow
                         if (this->terminais.find(split_gramatica[i + 1]) != this->terminais.end())
@@ -149,7 +149,7 @@ set<string> FirstFollow::follow(string str)
                             // ou não exista mais elementos
                             while (this->nullable(split_gramatica[i + 1]) == true)
                             {
-                                if (i + 1 == split_gramatica.size() - 1)
+                                if (i + 1 == (int)split_gramatica.size() - 1)
                                 {
                                     break;
                                 }

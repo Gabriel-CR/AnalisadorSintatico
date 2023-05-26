@@ -9,11 +9,11 @@ vector<string> Utils::split(string str, string token)
     while (str.size())
     {
         int index = str.find(token);
-        if (index != string::npos)
+        if (index != (int)string::npos)
         {
             result.push_back(str.substr(0, index));
             str = str.substr(index + token.size());
-            if (str.size() == 0)
+            if ((int)str.size() == 0)
                 result.push_back(str);
         }
         else
@@ -28,10 +28,10 @@ vector<string> Utils::split(string str, string token)
 string Utils::join(vector<string> v, string token)
 {
     string result = "";
-    for (int i = 0; i < v.size(); i++)
+    for (int i = 0; i < (int)v.size(); i++)
     {
         result += v[i];
-        if (i != v.size() - 1)
+        if (i != (int)v.size() - 1)
             result += token;
     }
     return result;
