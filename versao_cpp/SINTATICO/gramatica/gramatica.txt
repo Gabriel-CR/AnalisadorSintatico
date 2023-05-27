@@ -1,6 +1,3 @@
-S -> B $
-B -> id P
-B -> id ( E ]
-P -> ( E )
-E -> B
-E -> B , E
+S -> A $
+A -> a A 
+A -> a
