@@ -303,107 +303,78 @@ void Automato::make_automato(ElemEstado elem_inicial)
 
 bool Automato::test_word(string word)
 {
-    // std::cout << "Testando palavra: " << word << endl << endl;
-    int estado_atual = 1;
-    int i = 0;
-
-    vector<string> palavra = Utils::split(word, " ");
-
     stack<ElemPilha> pilha;
 
-    bool reduziu = false;
+    // coloca o estado inicial na pilha
+    pilha.push(ElemPilha("$", 1));
+
+    int posicao_palavra = 0;
+    int estado_atual = 1;
+    string acao;
 
     while (true)
     {
-        string simbolo = palavra[i];
-        string acao = this->automato[estado_atual][simbolo];
+        // estado_atual = pilha.top().estado;
 
-        // se eu não tenho ação no estado atual
-        // verifica se tem uma regra completa na pilha
-        // if (acao == "")
-        // {
-        //     acao = this->automato[estado_atual][pilha.top().token];
-        // }
+        // converter char para string
+        string caractere(1, word[posicao_palavra]);
+        acao = this->automato[estado_atual][caractere];
 
-        // std::cout << "Estado atual: " << estado_atual << endl;
-        // std::cout << "Simbolo: " << simbolo << endl;
-        // std::cout << "Acao: " << acao << endl;
-
-        // [shift] se ação for shift,
-        // empilha estado atual e simbolo
-        // vai para o estado da ação
         if (acao[0] == 's')
         {
-            // pilha.push("estado " + to_string(estado_atual));
-            // pilha.push(simbolo);
-            pilha.push(ElemPilha(simbolo, estado_atual));
+            // coloca o estado e a palavra na pilha
+            string e(1, word[posicao_palavra]);
+            pilha.push(ElemPilha(e, stoi(string(1, acao[1]))));
 
-            estado_atual = stoi(acao.substr(1, acao.size() - 1));
-            i++;
+            // incrementa a posição da palavra
+            posicao_palavra += 2;
+
+            // muda o estado atual
+            string x(1, acao[1]);
+            estado_atual = stoi(x);
         }
-
-        // [reduce] se ação for reduce,
-        // desempilha o tamanho da regra
-        // desempilha o estado
         else if (acao[0] == 'r')
         {
-            string regra = this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].second;
-            // cout << "Regra: " << regra << endl;
+            // pega a regra
+            string regra = this->ordem_regras[stoi(string(1, acao[1]))].second;
+            // cout << "regra: " << regra << endl;
+
+            // pega o tamanho da regra
             int tamanho_regra = Utils::split(regra, " ").size();
 
-            // std::cout << "Tamanho da regra: " << tamanho_regra << endl;
-
-            for (int j = 1; j < tamanho_regra; j++)
+            // desempilha o tamanho da regra
+            for (int i = 0; i < tamanho_regra; i++)
             {
                 pilha.pop();
             }
 
+            // pega o estado do topo da pilha
             estado_atual = pilha.top().estado;
-            pilha.pop();
+            // cout << "estado atual: " << estado_atual << endl;
 
-            string nao_terminal = this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].first;
-            // std::cout << "Nao terminal: " << nao_terminal << endl;
+            // pega o não terminal do topo da pilha
+            string nao_terminal = this->ordem_regras[stoi(string(1, acao[1]))].first;
+            // cout << "nao terminal: " << nao_terminal << endl;
 
+            // faz o goto
+            acao = this->automato[estado_atual][nao_terminal];
+            estado_atual = stoi(string(1, acao[1]));
+            // cout << "estado atual: " << estado_atual << endl;
+
+            // coloca o estado e o não terminal na pilha
             pilha.push(ElemPilha(nao_terminal, estado_atual));
-            reduziu = true;
         }
-
-        // [goto] se ação for goto,
-        // vai para o estado da ação
-        else if (acao[0] == 'g')
-        {
-            estado_atual = stoi(acao.substr(1, acao.size() - 1));
-        }
-
-        // [accept] se ação for accept,
-        // aceita a palavra
         else if (acao[0] == 'a')
         {
-            std::cout << "Sucesso" << endl;
+            cout << "Aceito" << endl;
             return true;
         }
-
-        // [error] se ação for error,
-        // rejeita a palavra
         else
         {
-            std::cout << "Erro sintático" << endl;
+            cout << "Erro sintatico" << endl;
             return false;
         }
-
-        // mostrar pilha
-        // std::cout << "Pilha: ";
-        // stack<ElemPilha> pilha_aux = pilha;
-        // while (!pilha_aux.empty())
-        // {
-        //     std::cout << "(" << pilha_aux.top().token << ", " << pilha_aux.top().estado << ") ";
-        //     pilha_aux.pop();
-        // }
-        // std::cout << endl
-        //           << endl;
     }
-
-    return false;
 }
 
 void Automato::set_gramatica(map<string, vector<string>> gramatica)
