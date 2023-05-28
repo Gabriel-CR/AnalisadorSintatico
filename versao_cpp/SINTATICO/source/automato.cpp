@@ -155,22 +155,6 @@ void Automato::make_automato(ElemEstado elem_inicial)
             }
         }
 
-        // mostrar regras
-        // cout << "Regras: " << endl;
-        // for (int i = 0; i < (int)regras.size(); i++)
-        // {
-        //     cout << regras[i].to_string() << endl;
-        // }
-
-        // // mostrar fila
-        // cout << "Fila: " << endl;
-        // queue<ElemEstado> temp_fila = fila;
-        // while (!temp_fila.empty())
-        // {
-        //     cout << temp_fila.front().to_string() << endl;
-        //     temp_fila.pop();
-        // }
-
         // [shift] se . na posição de Terminal != $, coloca um shift em automato
         for (int i = 0; i < (int)regras.size(); i++)
         {
@@ -209,9 +193,6 @@ void Automato::make_automato(ElemEstado elem_inicial)
                         regras.erase(regras.begin() + j);
                     }
                 }
-
-                // mostrar a regra que foi apagada
-                // cout << "Regra apagada: " << regras[i].to_string() << endl;
 
                 // apaga a regra antiga de regras
                 regras.erase(regras.begin() + i);
@@ -312,22 +293,22 @@ bool Automato::test_word(string word)
     int estado_atual = 1;
     string acao;
 
+    vector<string> word_ = Utils::split(word, " ");
+
     while (true)
     {
         // estado_atual = pilha.top().estado;
 
         // converter char para string
-        string caractere(1, word[posicao_palavra]);
-        acao = this->automato[estado_atual][caractere];
+        acao = this->automato[estado_atual][word_[posicao_palavra]];
 
         if (acao[0] == 's')
         {
             // coloca o estado e a palavra na pilha
-            string e(1, word[posicao_palavra]);
-            pilha.push(ElemPilha(e, stoi(string(1, acao[1]))));
+            pilha.push(ElemPilha(word_[posicao_palavra], stoi(string(1, acao[1]))));
 
             // incrementa a posição da palavra
-            posicao_palavra += 2;
+            posicao_palavra += 1;
 
             // muda o estado atual
             string x(1, acao[1]);
@@ -359,7 +340,6 @@ bool Automato::test_word(string word)
             // faz o goto
             acao = this->automato[estado_atual][nao_terminal];
             estado_atual = stoi(string(1, acao[1]));
-            // cout << "estado atual: " << estado_atual << endl;
 
             // coloca o estado e o não terminal na pilha
             pilha.push(ElemPilha(nao_terminal, estado_atual));
