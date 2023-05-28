@@ -113,6 +113,161 @@ set<string> FirstFollow::first(string str)
     return firsts;
 }
 
+/*set<string> FirstFollow::follow(string str)
+{
+    set<string> follows;
+    // tebela de memoização
+    map<string, set<string>> memo;
+
+    // iniciando a tabela de memoização
+    for (auto it = this->nao_terminais.begin(); it != this->nao_terminais.end(); it++)
+    {
+        memo[*it] = set<string>();
+    }
+
+    // calculando follow até que não haja mais mudanças
+    bool mudou = true;
+    while (mudou)
+    {
+        mudou = false;
+
+        // para cada regra da gramatica
+        for (auto it = this->gramatica.begin(); it != this->gramatica.end(); it++)
+        {
+            // para cada producao da regra
+            for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
+            {
+                // para cada elemento da producao
+                vector<string> split_gramatica = Utils::split(*it2, " ");
+                for (int i = 0; i < (int)split_gramatica.size(); i++)
+                {
+                    // se encontrei str na producao
+                    if (split_gramatica[i] == str)
+                    {
+                        // se tem um elemento depois de str
+                        if (i < (int)split_gramatica.size() - 1)
+                        {
+                            // se o proximo elemento é um terminal, adiciona ele no follow
+                            if (this->terminais.find(split_gramatica[i + 1]) != this->terminais.end())
+                            {
+                                if (memo[str].find(split_gramatica[i + 1]) == memo[str].end())
+                                {
+                                    memo[str].insert(split_gramatica[i + 1]);
+                                    mudou = true;
+                                }
+                            }
+                            // se o proximo elemento é um nao terminal, adiciona o follow dele no follow
+                            else
+                            {
+                                set<string> follows_producao = memo[split_gramatica[i + 1]];
+                                for (auto it3 = follows_producao.begin(); it3 != follows_producao.end(); it3++)
+                                {
+                                    if (memo[str].find(*it3) == memo[str].end())
+                                    {
+                                        memo[str].insert(*it3);
+                                        mudou = true;
+                                    }
+                                }
+
+                                // se o proximo elemento é nulo, adiciona o follow da regra no follow
+                                // faz isso até encontrar um elemento que não seja nulo
+                                // ou não exista mais elementos
+                                while (this->nullable(split_gramatica[i + 1]) == true)
+                                {
+                                    if (i + 1 == (int)split_gramatica.size() - 1)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        split_gramatica.erase(split_gramatica.begin());
+                                        set<string> follows_producao = memo[split_gramatica[i + 1]];
+                                        for (auto it3 = follows_producao.begin(); it3 != follows_producao.end(); it3++)
+                                        {
+                                            if (memo[str].find(*it3) == memo[str].end())
+                                            {
+                                                memo[str].insert(*it3);
+                                                mudou = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // se não tem um elemento depois de str
+                        else
+                        {
+                            // se o elemento atual é diferente da regra
+                            if (split_gramatica[i] != it->first)
+                            {
+                                // adiciona o follow da regra no follow
+                                set<string> follows_producao = memo[it->first];
+                                for (auto it3 = follows_producao.begin(); it3 != follows_producao.end(); it3++)
+                                {
+                                    if (memo[str].find(*it3) == memo[str].end())
+                                    {
+                                        memo[str].insert(*it3);
+                                        mudou = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        // se o elemento atual é nulo, adiciona o follow da regra no follow
+                        // faz isso até encontrar um elemento que não seja nulo
+                        // ou não exista mais elementos
+                        while (this->nullable(split_gramatica[i]) == true)
+                        {
+                            if (i == (int)split_gramatica.size() - 1)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                split_gramatica.erase(split_gramatica.begin());
+                                set<string> follows_producao = memo[split_gramatica[i]];
+                                for (auto it3 = follows_producao.begin(); it3 != follows_producao.end(); it3++)
+                                {
+                                    if (memo[str].find(*it3) == memo[str].end())
+                                    {
+                                        memo[str].insert(*it3);
+                                        mudou = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // se str estiver no final de alguma produção, adiciona o follow da regra no follow
+    for (auto it = this->gramatica.begin(); it != this->gramatica.end(); it++)
+    {
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
+        {
+            vector<string> split_gramatica = Utils::split(*it2, " ");
+            if (split_gramatica[split_gramatica.size() - 1] == str)
+            {
+                set<string> follows_producao = memo[it->first];
+                for (auto it3 = follows_producao.begin(); it3 != follows_producao.end(); it3++)
+                {
+                    if (memo[str].find(*it3) == memo[str].end())
+                    {
+                        memo[str].insert(*it3);
+                        mudou = true;
+                    }
+                }
+            }
+        }
+    }
+
+    follows = memo[str];
+
+    return follows;
+}*/
+
 set<string> FirstFollow::follow(string str)
 {
     set<string> follows;
@@ -172,6 +327,26 @@ set<string> FirstFollow::follow(string str)
                             follows.insert(follows_producao.begin(), follows_producao.end());
                         }
                     }
+                }
+            }
+        }
+    }
+
+    this->follows[str] = follows;
+
+    // se str estiver no final de alguma produção, adiciona o follow da regra no follow
+    // procurar em follows[str] para não entrar em loop infinito
+    for (auto it = this->gramatica.begin(); it != this->gramatica.end(); it++)
+    {
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
+        {
+            vector<string> split_gramatica = Utils::split(*it2, " ");
+            if (split_gramatica[split_gramatica.size() - 1] == str)
+            {
+                if (this->follows.find(it->first) != this->follows.end())
+                {
+                    set<string> follows_producao = this->follows[it->first];
+                    follows.insert(follows_producao.begin(), follows_producao.end());
                 }
             }
         }

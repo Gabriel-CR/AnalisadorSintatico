@@ -11,6 +11,7 @@
 
 #include "gramatica.h"
 #include "elem_estado.h"
+#include "elem_pilha.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ class Automato
 public:
     Automato();
 
+    vector<ElemEstado> closure(vector<ElemEstado> elem, int current_state);
     /*
     Forma o automato a partir de um elemento inicial
     @param elem_inicial: primeira regra da gramatica

@@ -7,3 +7,22 @@ ElemEstado::ElemEstado(string gerador, string gerado, int posicao_ponto, int est
     this->posicao_ponto = posicao_ponto;
     this->estado = estado;
 }
+
+string ElemEstado::to_string()
+{
+    string str = this->gerador + " -> ";
+    for (int i = 0; i < (int)this->gerado.size(); i++)
+    {
+        if (i == this->posicao_ponto)
+        {
+            str += ". ";
+        }
+        str += this->gerado[i] + " ";
+    }
+    if (this->posicao_ponto == (int)this->gerado.size())
+    {
+        str += ". ";
+    }
+    str += "Estado: " + std::to_string(this->estado);
+    return str;
+}

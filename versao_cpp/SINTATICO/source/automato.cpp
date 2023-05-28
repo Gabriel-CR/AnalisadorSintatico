@@ -4,6 +4,69 @@ Automato::Automato()
 {
 }
 
+vector<ElemEstado> Automato::closure(vector<ElemEstado> elem, int current_state)
+{
+    vector<ElemEstado> closure;
+    for (int i = 0; i < (int)elem.size(); i++)
+    {
+        closure.push_back(elem[i]);
+    }
+
+    for (int i = 0; i < (int)closure.size(); i++)
+    {
+        if (closure[i].posicao_ponto < (int)closure[i].gerado.size() &&
+            this->nao_terminais.find(closure[i].gerado[closure[i].posicao_ponto]) != this->nao_terminais.end())
+        {
+            // cria um novo ElemEstado para cada regra do não terminal
+            for (int j = 0; j < (int)this->gramatica[closure[i].gerado[closure[i].posicao_ponto]].size(); j++)
+            {
+                ElemEstado novo(closure[i].gerado[closure[i].posicao_ponto], this->gramatica[closure[i].gerado[closure[i].posicao_ponto]][j], 0, current_state);
+
+                // verifica se já não existe esse novo ElemEstado em closure
+                bool existe = false;
+                for (int k = 0; k < (int)closure.size(); k++)
+                {
+                    if (closure[k].gerador == novo.gerador &&
+                        closure[k].gerado == novo.gerado &&
+                        closure[k].posicao_ponto == novo.posicao_ponto)
+                    {
+                        existe = true;
+                        break;
+                    }
+                }
+
+                // se não existe, adiciona em closure
+                if (!existe)
+                {
+                    closure.push_back(novo);
+                }
+            }
+        }
+    }
+
+    // antes de retornar, verifico se já não existe esse estado no automato
+    // se existe, não retorno
+    // se não existe, retorno
+    for (int i = 0; i < (int)closure.size(); i++)
+    {
+        if (closure[i].posicao_ponto == (int)closure[i].gerado.size())
+        {
+            // se já existe esse estado no automato, não retorno
+            if (this->automato.find(current_state) != this->automato.end())
+            {
+                return vector<ElemEstado>();
+            }
+            // se não existe, retorno
+            else
+            {
+                return closure;
+            }
+        }
+    }
+
+    return closure;
+}
+
 void Automato::make_automato(ElemEstado elem_inicial)
 {
     queue<ElemEstado> fila;
@@ -12,6 +75,8 @@ void Automato::make_automato(ElemEstado elem_inicial)
     vector<ElemEstado> regras;
     int current_state = 1;
     int temp_state = 1;
+
+    vector<vector<ElemEstado>> regras_verify;
 
     // enquanto a fila não estiver vazia
     while (!fila.empty())
@@ -27,21 +92,84 @@ void Automato::make_automato(ElemEstado elem_inicial)
             fila.pop();
         }
 
-        // [ERRO] loop infinito, verificar antes de colocar em regras se já não possui essa regra em regras
-        // se . na posição de NT, adiciona as regras deste NT em regras
-        for (int i = 0; i < (int)regras.size(); i++)
+        vector<ElemEstado> temp = this->closure(regras, current_state);
+
+        // verifica se essas regras já não foram processadas
+        // faz isso verificando regras_verify
+        bool existe = false;
+        for (int i = 0; i < (int)regras_verify.size(); i++)
         {
-            if (regras[i].posicao_ponto < (int)regras[i].gerado.size() &&
-                this->nao_terminais.find(regras[i].gerado[regras[i].posicao_ponto]) != this->nao_terminais.end())
+            for (int j = 0; j < (int)regras_verify[i].size(); j++)
             {
-                // adiciona as regras deste NT em regras
-                for (int j = 0; j < (int)this->gramatica[regras[i].gerado[regras[i].posicao_ponto]].size(); j++)
+                if (regras_verify[i][j].gerador == temp[j].gerador &&
+                    regras_verify[i][j].gerado == temp[j].gerado &&
+                    regras_verify[i][j].posicao_ponto == temp[j].posicao_ponto)
                 {
-                    ElemEstado novo(regras[i].gerado[regras[i].posicao_ponto], this->gramatica[regras[i].gerado[regras[i].posicao_ponto]][j], 0, temp_state);
-                    regras.push_back(novo);
+                    existe = true;
+
+                    // se existe, faz a transição goto ou shift
+                    // se o ponto esta na posição de um NT, faz goto para o estado que possui esse NT
+                    if (temp[j].posicao_ponto < (int)temp[j].gerado.size() &&
+                        this->nao_terminais.find(temp[j].gerado[temp[j].posicao_ponto]) != this->nao_terminais.end())
+                    {
+                        this->automato[current_state][temp[j].gerado[temp[j].posicao_ponto]] = "g" + to_string(regras_verify[i][j].estado + 1);
+                    }
+
+                    // se o ponto esta na posição de um T, faz shift para o estado que possui esse T
+                    else if (temp[j].posicao_ponto < (int)temp[j].gerado.size() &&
+                             this->terminais.find(temp[j].gerado[temp[j].posicao_ponto]) != this->terminais.end())
+                    {
+                        this->automato[current_state][temp[j].gerado[temp[j].posicao_ponto]] = "s" + to_string(regras_verify[i][j].estado + 1);
+                    }
+                }
+            }
+
+            if (existe)
+            {
+                break;
+            }
+        }
+
+        // se não existe, adiciona em regras_verify e em regras
+        if (!existe)
+        {
+            regras_verify.push_back(temp);
+            for (int i = 0; i < (int)temp.size(); i++)
+            {
+                regras.push_back(temp[i]);
+            }
+
+            // remove regras repetidas
+            for (int i = 0; i < (int)regras.size(); i++)
+            {
+                for (int j = i + 1; j < (int)regras.size(); j++)
+                {
+                    if (regras[i].gerador == regras[j].gerador &&
+                        regras[i].gerado == regras[j].gerado &&
+                        regras[i].posicao_ponto == regras[j].posicao_ponto)
+                    {
+                        regras.erase(regras.begin() + j);
+                        j--;
+                    }
                 }
             }
         }
+
+        // mostrar regras
+        // cout << "Regras: " << endl;
+        // for (int i = 0; i < (int)regras.size(); i++)
+        // {
+        //     cout << regras[i].to_string() << endl;
+        // }
+
+        // // mostrar fila
+        // cout << "Fila: " << endl;
+        // queue<ElemEstado> temp_fila = fila;
+        // while (!temp_fila.empty())
+        // {
+        //     cout << temp_fila.front().to_string() << endl;
+        //     temp_fila.pop();
+        // }
 
         // [shift] se . na posição de Terminal != $, coloca um shift em automato
         for (int i = 0; i < (int)regras.size(); i++)
@@ -81,6 +209,9 @@ void Automato::make_automato(ElemEstado elem_inicial)
                         regras.erase(regras.begin() + j);
                     }
                 }
+
+                // mostrar a regra que foi apagada
+                // cout << "Regra apagada: " << regras[i].to_string() << endl;
 
                 // apaga a regra antiga de regras
                 regras.erase(regras.begin() + i);
@@ -172,41 +303,40 @@ void Automato::make_automato(ElemEstado elem_inicial)
 
 bool Automato::test_word(string word)
 {
-    cout << "Testando palavra: " << word << endl
-         << endl;
+    // std::cout << "Testando palavra: " << word << endl << endl;
     int estado_atual = 1;
     int i = 0;
 
     vector<string> palavra = Utils::split(word, " ");
 
-    stack<string> pilha;
+    stack<ElemPilha> pilha;
+
+    bool reduziu = false;
 
     while (true)
     {
         string simbolo = palavra[i];
         string acao = this->automato[estado_atual][simbolo];
 
-        // se no topo da pilha tem um não terminal
-        // alterar acao
-        if (!pilha.empty() && this->nao_terminais.find(pilha.top()) != this->nao_terminais.end())
-        {
-            acao = this->automato[estado_atual][pilha.top()];
+        // se eu não tenho ação no estado atual
+        // verifica se tem uma regra completa na pilha
+        // if (acao == "")
+        // {
+        //     acao = this->automato[estado_atual][pilha.top().token];
+        // }
 
-            // [ERRO] em alguns casos eu não irei poder retirar
-            pilha.pop();
-        }
-
-        cout << "Estado atual: " << estado_atual << endl;
-        cout << "Simbolo: " << simbolo << endl;
-        cout << "Acao: " << acao << endl;
+        // std::cout << "Estado atual: " << estado_atual << endl;
+        // std::cout << "Simbolo: " << simbolo << endl;
+        // std::cout << "Acao: " << acao << endl;
 
         // [shift] se ação for shift,
         // empilha estado atual e simbolo
         // vai para o estado da ação
         if (acao[0] == 's')
         {
-            pilha.push("estado " + to_string(estado_atual));
-            pilha.push(simbolo);
+            // pilha.push("estado " + to_string(estado_atual));
+            // pilha.push(simbolo);
+            pilha.push(ElemPilha(simbolo, estado_atual));
 
             estado_atual = stoi(acao.substr(1, acao.size() - 1));
             i++;
@@ -217,21 +347,25 @@ bool Automato::test_word(string word)
         // desempilha o estado
         else if (acao[0] == 'r')
         {
-            int tamanho_regra = Utils::split(this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].second, " ").size();
-            cout << "Tamanho da regra: " << tamanho_regra << endl;
+            string regra = this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].second;
+            // cout << "Regra: " << regra << endl;
+            int tamanho_regra = Utils::split(regra, " ").size();
 
-            for (int j = 0; j < tamanho_regra; j++)
+            // std::cout << "Tamanho da regra: " << tamanho_regra << endl;
+
+            for (int j = 1; j < tamanho_regra; j++)
             {
                 pilha.pop();
             }
 
-            estado_atual = stoi(pilha.top().substr(7, pilha.top().size() - 7));
+            estado_atual = pilha.top().estado;
             pilha.pop();
 
             string nao_terminal = this->ordem_regras[stoi(acao.substr(1, acao.size() - 1))].first;
-            cout << "Nao terminal: " << nao_terminal << endl;
+            // std::cout << "Nao terminal: " << nao_terminal << endl;
 
-            pilha.push(nao_terminal);
+            pilha.push(ElemPilha(nao_terminal, estado_atual));
+            reduziu = true;
         }
 
         // [goto] se ação for goto,
@@ -245,7 +379,7 @@ bool Automato::test_word(string word)
         // aceita a palavra
         else if (acao[0] == 'a')
         {
-            cout << "Palavra aceita!" << endl;
+            std::cout << "Sucesso" << endl;
             return true;
         }
 
@@ -253,20 +387,20 @@ bool Automato::test_word(string word)
         // rejeita a palavra
         else
         {
-            cout << "Palavra rejeitada!" << endl;
+            std::cout << "Erro sintático" << endl;
             return false;
         }
 
         // mostrar pilha
-        cout << "Pilha: ";
-        stack<string> pilha_aux = pilha;
-        while (!pilha_aux.empty())
-        {
-            cout << pilha_aux.top() << " ";
-            pilha_aux.pop();
-        }
-        cout << endl
-             << endl;
+        // std::cout << "Pilha: ";
+        // stack<ElemPilha> pilha_aux = pilha;
+        // while (!pilha_aux.empty())
+        // {
+        //     std::cout << "(" << pilha_aux.top().token << ", " << pilha_aux.top().estado << ") ";
+        //     pilha_aux.pop();
+        // }
+        // std::cout << endl
+        //           << endl;
     }
 
     return false;
@@ -294,20 +428,20 @@ void Automato::set_nao_terminais(set<string> nao_terminais)
 
 void Automato::print_automato()
 {
-    cout << "Automato: " << endl;
+    std::cout << "Automato: " << endl;
     for (auto it = this->automato.begin(); it != this->automato.end(); it++)
     {
-        cout << it->first << " : { ";
+        std::cout << it->first << " : { ";
         for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
         {
             // se for o ultimo elemento, não coloca a virgula
             if (next(it2) == it->second.end())
             {
-                cout << it2->first << " -> " << it2->second << " ";
+                std::cout << it2->first << " -> " << it2->second << " ";
                 break;
             }
-            cout << it2->first << " -> " << it2->second << ", ";
+            std::cout << it2->first << " -> " << it2->second << ", ";
         }
-        cout << "}" << endl;
+        std::cout << "}" << endl;
     }
 }

@@ -16,10 +16,13 @@ class Controller
 
 public:
     Controller(string caminho);
+
+    void menu();
+
     void read_gramatica_file();
     void make_gramatica(map<string, vector<string>> gramatica);
     void make_nullable();
     void make_firsts();
     void make_follows();
-    void make_automato();
+    void make_automato(string palavra);
 };

@@ -5,9 +5,24 @@ Controller::Controller(string caminho)
     this->caminho = caminho;
 }
 
+void Controller::menu()
+{
+    cout << "[ERRO] erro nos argumentos passados ou falta deles" << endl;
+    cout << "Para compilar o código, use:" << endl;
+    cout << "g++ -o run ./source/*.cpp  *.cpp" << endl;
+    cout << "Para executar o código, use:" << endl;
+    cout << "./run [argumento] [palavra]" << endl;
+    cout << "\t[argumento] pode ser ff ou aut" << endl;
+    cout << "\t[palavra] deve estar entre aspas e cada token deve ser separado por espaco" << endl;
+    cout << "\t[OBS] palavra deve ser usada somente com argumento aut" << endl;
+    cout << "Exemplo de uso:" << endl;
+    cout << "./run ff" << endl;
+    cout << "./run aut \"print ( id )\"" << endl;
+}
+
 void Controller::read_gramatica_file()
 {
-    cout << "Lendo arquivo de gramatica..." << endl;
+    // cout << "Lendo arquivo de gramatica..." << endl;
     map<string, vector<string>> gramatica;
     fstream file;
     file.open(this->caminho, ios::in);
@@ -27,7 +42,7 @@ void Controller::read_gramatica_file()
             this->ordem_regras.push_back(make_pair(nao_terminal, gerador));
         }
         file.close();
-        cout << "Gramatica lida com sucesso!" << endl;
+        // cout << "Gramatica lida com sucesso!" << endl;
         this->make_gramatica(gramatica);
     }
     else
@@ -84,7 +99,7 @@ void Controller::make_follows()
     }
 }
 
-void Controller::make_automato()
+void Controller::make_automato(string palavra)
 {
     this->automato.set_ordem_regras(this->ordem_regras);
     this->automato.set_gramatica(this->gramatica.get_gramatica());
@@ -93,6 +108,6 @@ void Controller::make_automato()
 
     vector<ElemEstado> elem_inicial;
     this->automato.make_automato(ElemEstado(this->ordem_regras[0].first, this->ordem_regras[0].second, 0, 1));
-    this->automato.print_automato();
-    this->automato.test_word("a a a a $");
+    // this->automato.print_automato();
+    this->automato.test_word(palavra + " $");
 }

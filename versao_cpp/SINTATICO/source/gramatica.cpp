@@ -6,7 +6,7 @@ Gramatica::Gramatica()
 
 void Gramatica::make_terminais()
 {
-    cout << "Criando conjunto de terminais..." << endl;
+    // cout << "Criando conjunto de terminais..." << endl;
     for (auto i : this->gramatica)
     {
         this->nao_terminais.insert(i.first);
@@ -15,7 +15,7 @@ void Gramatica::make_terminais()
 
 void Gramatica::make_nao_terminais()
 {
-    cout << "Criando conjunto de nao terminais..." << endl;
+    // cout << "Criando conjunto de nao terminais..." << endl;
     for (auto i : this->gramatica)
     {
         for (auto j : i.second)

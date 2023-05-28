@@ -8,7 +8,7 @@ class FirstFollow
     map<string, vector<string>> gramatica;
     set<string> terminais;
     set<string> nao_terminais;
-    
+
     map<string, set<string>> firsts;
     map<string, set<string>> follows;
 
